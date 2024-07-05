@@ -25,9 +25,9 @@ class NewVisitorTest(unittest.TestCase):
 
         # Она видит, что заголовок и шапка страницы говорят о списках
         # неотложных дел
-        self.assertIn("To-Do", self.browser.title)
+        self.assertIn("To-Do lists", self.browser.title)
         header_text = self.browser.find_element(By.TAG_NAME, "h1").text
-        self.assertIn("To-DO", header_text)
+        self.assertIn("To-Do list", header_text)
 
         # Ей сразу же предлагается ввести элемент списка
         input_box = self.browser.find_element(By.ID, "id_new_item")
@@ -38,7 +38,7 @@ class NewVisitorTest(unittest.TestCase):
 
         # Она набирает в текстовом поле "Купить павлиньи перья"
         # (ее хобби – вязание рыболовных мушек)
-        input_box.send_keys('Купить павлиньи перья')
+        input_box.send_keys("Купить павлиньи перья")
 
         # Когда она нажимает enter, страница обновляется, и теперь страница
         # содержит "1: Купить павлиньи перья" в качестве элемента списка
@@ -46,18 +46,21 @@ class NewVisitorTest(unittest.TestCase):
         time.sleep(1)
 
         table = self.browser.find_element(By.ID, "id_list_table")
-        rows = table.find_elements(By.TAG_NAME, 'tr')
-        self.assertTrue(any(row.text == "1: Купить павлиньи перья" for row in rows))
+        rows = table.find_elements(By.TAG_NAME, "tr")
+        self.assertTrue(
+            any(row.text == "1: Купить павлиньи перья" for row in rows),
+            "Новый элемент списка не появился в таблице",
+        )
 
         # Текстовое поле по-прежнему приглашает ее добавить еще один элемент.
         # Она вводит "Сделать мушку из павлиньих перьев"
         # (Эдит очень методична)
 
-
         self.fail("Закончить тест!")
 
         # Страница снова обновляется и теперь показывает оба элемента
         # ее списка
+
 
 if __name__ == "__main__":
     unittest.main()
