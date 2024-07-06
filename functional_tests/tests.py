@@ -1,13 +1,13 @@
 import time
-import unittest
 
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         chrome_options = Options()
         # chrome_options.add_argument("--headless")
@@ -26,7 +26,7 @@ class NewVisitorTest(unittest.TestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Эдит слышала про крутое новое онлайн-приложение со списком
         # неотложных дел. Она решает оценить его домашнюю страницу
-        self.browser.get("http://localhost:8000")
+        self.browser.get(self.live_server_url)
 
         # Она видит, что заголовок и шапка страницы говорят о списках
         # неотложных дел
@@ -72,7 +72,3 @@ class NewVisitorTest(unittest.TestCase):
         self.fail("Закончить тест!")
 
         # Она посещает этот URL-адрес – ее список по-прежнему там.
-
-
-if __name__ == "__main__":
-    unittest.main()
