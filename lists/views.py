@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from lists.models import Item
+from lists.models import Item, List
 
 
 def home_page(request):
@@ -21,5 +21,6 @@ def view_list(request):
 
 def new_list(request):
     """Новый список."""
-    Item.objects.create(text=request.POST["item_text"])
+    list_ = List.objects.create()
+    Item.objects.create(text=request.POST["item_text"], list=list_)
     return redirect("/lists/the-one-list-in-the-world/")
