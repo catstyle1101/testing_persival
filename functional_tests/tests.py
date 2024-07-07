@@ -75,9 +75,49 @@ class NewVisitorTest(LiveServerTestCase):
         # ее списка
         self.wait_for_row_in_list_table("1: Купить павлиньи перья")
         self.wait_for_row_in_list_table("2: Сделать мушку из павлиньих перьев")
-        # Эдит интересно, запомнит ли сайт ее список. Далее она видит, что
-        # сайт сгенерировал для нее уникальный URL-адрес – об этом
-        # выводится небольшой текст с пояснениями.
-        self.fail("Закончить тест!")
+        # Удовлетворенная, она снова ложится спать.
 
-        # Она посещает этот URL-адрес – ее список по-прежнему там.
+    def test_multiple_users_can_start_lists_at_different_urls(self):
+        """Тест: многочиесленные пользователи могут начать списки по разным url."""
+        # Эдит начинает новый список
+        self.browser.get(self.live_server_url)
+        input_box = self.browser.find_element(By.ID, "id_new_item")
+        input_box.send_keys("Купить павлиньи перья")
+        input_box.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table("1: Купить павлиньи перья")
+
+        # Она замечает, что ее список имеет уникальный URL адрес
+        edith_list_url = self.browser.current_url
+        self.assertRegex(edith_list_url, "/lists/.+")
+
+        # Теперь новый пользователь Фрэнсис приходит на сайт.
+
+        ## Мы используем новый сеанс браузера, тем самым обеспечивая, чтобы никакая
+        ## Информация от Эдит не прошла через данные cookie и пр.
+        self.browser.quit()
+        self.browser = webdriver.Chrome()
+
+        # Фрэнсис посещает домашнюю страницу. Нет никаких признаков списка Эдит.
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element(By.ID, "body").text
+        self.assertNotIn("Купить павлиньи перья", page_text)
+        self.assertNotIn("Сделать мушку", page_text)
+
+        # Фрэнсис начинает новый список, вводя новый элемент. Он менее
+        # интересен, чем список Эдит...
+        input_box = self.browser.find_element(By.ID, "id_new_item")
+        input_box.send_keys("Купить молоко")
+        input_box.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table("1: Купить молоко")
+
+        # Фрэнсис получает уникальный URL адрес
+        francis_list_url = self.browser.current_url
+        self.assertRegex(francis_list_url, "/lists/.+")
+        self.assertNotEqual(edith_list_url, francis_list_url)
+
+        # Опять-таки, нет ни следа от списка Эдит.
+        page_text = self.browser.find_element(By.ID, "body").text
+        self.assertNotIn("Купить павлиньи перья", page_text)
+        self.assertNotIn("Сделать мушку", page_text)
+
+        # Удовлетворенные они оба ложаться спать.
