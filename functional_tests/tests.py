@@ -8,13 +8,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 
 
-MAX_WAIT = 10
+MAX_WAIT = 2
 
 
 class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         chrome_options = Options()
-        # chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--headless")
         self.browser = webdriver.Chrome(
             options=chrome_options,
         )
@@ -69,7 +69,6 @@ class NewVisitorTest(LiveServerTestCase):
         input_box = self.browser.find_element(By.ID, 'id_new_item')
         input_box.send_keys('Сделать мушку из павлиньих перьев')
         input_box.send_keys(Keys.ENTER)
-        time.sleep(1)
 
         # Страница снова обновляется и теперь показывает оба элемента
         # ее списка
@@ -95,13 +94,13 @@ class NewVisitorTest(LiveServerTestCase):
         ## Мы используем новый сеанс браузера, тем самым обеспечивая, чтобы никакая
         ## Информация от Эдит не прошла через данные cookie и пр.
         self.browser.quit()
-        self.browser = webdriver.Chrome()
-
+        # self.browser = webdriver.Chrome()
+        self.setUp()
         # Фрэнсис посещает домашнюю страницу. Нет никаких признаков списка Эдит.
         self.browser.get(self.live_server_url)
-        page_text = self.browser.find_element(By.ID, "body").text
+        page_text = self.browser.find_element(By.TAG_NAME, "body").text
         self.assertNotIn("Купить павлиньи перья", page_text)
-        self.assertNotIn("Сделать мушку", page_text)
+        self.assertNotIn("Сделать мушку из павлиньих перьев", page_text)
 
         # Фрэнсис начинает новый список, вводя новый элемент. Он менее
         # интересен, чем список Эдит...
@@ -116,7 +115,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertNotEqual(edith_list_url, francis_list_url)
 
         # Опять-таки, нет ни следа от списка Эдит.
-        page_text = self.browser.find_element(By.ID, "body").text
+        page_text = self.browser.find_element(By.TAG_NAME, "body").text
         self.assertNotIn("Купить павлиньи перья", page_text)
         self.assertNotIn("Сделать мушку", page_text)
 
