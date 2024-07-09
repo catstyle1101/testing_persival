@@ -25,7 +25,11 @@ SECRET_KEY = "django-insecure-nl+_qrwe11ey7w%@(l)k5&^2-olzq((y5=3%plae5frg4-*jv1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "http://catstyle.ddns.net",
+    "localhost",
+    "catstyle.ddns.net",
+]
 
 
 # Application definition
@@ -64,6 +68,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+            "builtins": ["django.templatetags.static"],
         },
     },
 ]
@@ -116,8 +121,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR.parent / "static"
+MEDIA_URL = "/media/"
+# STATICFILES_DIRS = [BASE_DIR.parent / "static"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -127,3 +134,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CSRF_TRUSTED_ORIGINS = [
     "http://catstyle.ddns.net",
 ]
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
