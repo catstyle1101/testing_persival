@@ -1,3 +1,4 @@
+import os
 import time
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
@@ -19,6 +20,9 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.browser = webdriver.Chrome(
             options=chrome_options,
         )
+        staging_server = os.getenv("STAGING_SERVER")
+        if staging_server:
+            self.live_server_url = f"http://{staging_server}"
 
     def tearDown(self):
         self.browser.quit()
