@@ -1,5 +1,6 @@
 import time
 
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.common import WebDriverException
@@ -11,7 +12,7 @@ from selenium.webdriver.chrome.options import Options
 MAX_WAIT = 2
 
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
     def setUp(self):
         chrome_options = Options()
         # chrome_options.add_argument("--headless")
