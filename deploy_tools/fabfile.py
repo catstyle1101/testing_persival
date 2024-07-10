@@ -9,7 +9,7 @@ REPO_URL = "https://github.com/catstyle1101/testing_persival"
 
 def deploy():
     """Deploy a fabric package."""
-    site_folder = f"/home/{env.user}/sites/{env.host}"
+    site_folder = f"/home/www/sites/{env.host}"
     source_folder = site_folder + "/source"
     _create_directory_structure_if_necessary(site_folder)
     _get_latest_source(source_folder)
