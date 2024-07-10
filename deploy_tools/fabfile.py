@@ -29,7 +29,7 @@ def _get_latest_source(source_folder):
         run(f"cd {source_folder} && git fetch")
     else:
         run(f"git clone {REPO_URL} {source_folder}")
-    current_commit = local("git log -n 1 --format=%H", capture=False)
+    current_commit = str(local("git log -n 1 --format=%H", capture=True)).strip("'")
     run(f"cd {source_folder} && git reset --hard {current_commit}")
 
 
@@ -38,33 +38,35 @@ def _update_settings(source_folder, site_name):
     sed(settings_path, "DEBUG = True", "DEBUG = False")
     sed(
         settings_path,
-        "ALLOWED_HOSTS =.+$",
-        f"ALLOWED_HOSTS = ['{site_name}']",
+        r'ALLOWED_HOSTS = \[\]',
+        rf"ALLOWED_HOSTS = \[\"{site_name}\"\]",
     )
     secret_key_file = source_folder + "/superlists/secret_key.py"
     if not exists(secret_key_file):
-        chars = string.ascii_letters + string.digits + string.punctuation
+        chars = string.ascii_letters + string.digits + "!@#$%^&*(-_=+)"
         key = "".join(random.SystemRandom().choice(chars) for _ in range(50))
         append(secret_key_file, f"SECRET_KEY = '{key}'")
     append(settings_path, "\nfrom .secret_key import SECRET_KEY\n")
 
 
 def _update_virtualenv(source_folder):
-    virtualenv_folder = source_folder + "/../virtualenv"
+    virtualenv_folder = source_folder.removesuffix("source/") + "/virtualenv"
     if not exists(virtualenv_folder):
-        run(f"python3,11 -m venv {virtualenv_folder}")
+        run(f"python3.11 -m venv {virtualenv_folder}")
     run(f"{virtualenv_folder}/bin/pip install -r {source_folder}/requirements.txt")
 
 
 def _update_static_files(source_folder):
+
     run(
-        f"cd {source_folder} && "
-        f"../virtualenv/bin/python manage.py collectstatic --noinput"
+        f"cd {source_folder} &&"
+        f"{source_folder.removesuffix('source/')}/virtualenv/bin/python manage.py collectstatic --noinput"
     )
 
 
 def _update_database(source_folder):
     run(
-        f"cd {source_folder} && "
-        f"../virtualenv/bin/python manage.py migrate --noinput"
+        f"cd {source_folder} &&"
+        f"{source_folder.removesuffix('source/')}/virtualenv/bin/python "
+        f"manage.py migrate --noinput"
     )

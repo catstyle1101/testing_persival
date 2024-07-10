@@ -32,4 +32,34 @@
         ├── database
         ├── source 
         ├── static 
-        └── virtualenv```
+        └── virtualenv
+```
+
+## Fabric3 deploy
+
+
+On computer
+```
+pip install fabric3
+fab deploy --host=mysite.name
+```
+
+On server
+```
+export SITE_URL=mysite.name
+
+sed "s/SITENAME/$SITE_URL/g" source/deploy_tools/nginx.template.conf | sudo tee /etc/nginx/sites-available/$SITE_URL
+
+sudo ln -s ../sites-available/$SITE_URL /etc/nginx/sites-enabled/$SITE_URL
+
+sed "s/SITENAME/$SITE_URL/g" source/deploy_tools/gunicorn-systemd.template.service | sudo tee /etc/systemd/system/gunicorn-$SITE_URL.service
+
+sudo systemctl daemon-reload
+
+sudo systemctl reload nginx
+
+sudo systemctl enable gunicorn-$SITE_URL
+
+sudo systemctl start gunicorn-$SITE_URL
+
+```
