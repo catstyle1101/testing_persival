@@ -7,7 +7,7 @@ from selenium.common import WebDriverException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
-MAX_WAIT = 2
+MAX_WAIT = 10
 
 
 class FunctionalTest(StaticLiveServerTestCase):
