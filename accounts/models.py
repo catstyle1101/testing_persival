@@ -4,7 +4,7 @@ from django.db import models
 
 
 class User(models.Model):
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, primary_key=True)
 
     REQUIRED_FIELDS = []
     USERNAME_FIELD = 'email'
