@@ -10,6 +10,7 @@ from accounts.models import Token
 
 logger = logging.getLogger(__name__)
 
+
 def send_login_email(request):
     email = request.POST.get("email")
     token = Token.objects.create(email=email)
@@ -37,4 +38,9 @@ def login(request):
     user = auth.authenticate(request, uid=uid)
     if user is not None:
         auth.login(request, user)
+    return redirect("/")
+
+
+def logout(request):
+    auth.logout(request)
     return redirect("/")
