@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 from functional_tests.base import FunctionalTest
 
 TEST_EMAIL = "edith@example.com"
-SUBJECT = "Your login link for SuperLists"
+SUBJECT = "Your login link for Superlists"
 
 
 class LoginTest(FunctionalTest):
@@ -22,7 +22,7 @@ class LoginTest(FunctionalTest):
         # Появляется сообщение, что ей на почту было выслано письмо
         self.wait_for(
             lambda: self.assertIn(
-                "Check for your email",
+                "Check your email for your login link",
                 self.browser.find_element(By.TAG_NAME, "body").text,
             )
         )

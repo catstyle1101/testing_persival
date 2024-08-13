@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     # "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
+    "django.contrib.sites",
+    "django.contrib.flatpages",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
@@ -42,6 +44,10 @@ INSTALLED_APPS = [
 ]
 
 AUTH_USER_MODEL = "accounts.User"
+
+AUTHENTICATION_BACKENDS = [
+    "accounts.authentication.PasswordlessAuthenticationBackend",
+]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -151,3 +157,11 @@ LOGGING = {
     },
     'root': {'level': 'INFO'},
 }
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'obeythetestinggoat@gmail.com'
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
