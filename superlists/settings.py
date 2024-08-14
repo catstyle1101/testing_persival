@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "lists.apps.ListsConfig",
     "accounts.apps.AccountsConfig",
+    "functional_tests",
 ]
 
 AUTH_USER_MODEL = "accounts.User"
