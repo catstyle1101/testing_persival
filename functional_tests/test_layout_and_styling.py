@@ -21,9 +21,7 @@ class LayoutAndStylingTest(FunctionalTest):
 
         # Она начинает новый список и видит, что поле ввода там тоже
         # аккуратно центрировано
-        input_box.send_keys("testing")
-        input_box.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table("1: testing")
+        self.add_list_item("testing")
         input_box = self.get_item_input_box()
         self.assertAlmostEqual(
             input_box.location["x"] + input_box.size["width"] / 2,

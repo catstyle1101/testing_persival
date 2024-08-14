@@ -4,6 +4,7 @@ import time
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.common import WebDriverException
+from selenium.webdriver import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
@@ -28,7 +29,7 @@ def wait(fn):
 class FunctionalTest(StaticLiveServerTestCase):
     def setUp(self):
         chrome_options = Options()
-        chrome_options.add_argument("--headless")
+        # chrome_options.add_argument("--headless")
         self.browser = webdriver.Chrome(
             options=chrome_options,
         )
@@ -64,3 +65,13 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.find_element(By.NAME, "email")
         navbar = self.browser.find_element(By.CLASS_NAME, "navbar")
         self.assertNotIn(email, navbar.text)
+
+    def add_list_item(self, item_text):
+        num_rows = len(self.browser.find_elements(
+            By.CSS_SELECTOR,
+            "#id_list_table tr"),
+        )
+        self.get_item_input_box().send_keys(item_text)
+        self.get_item_input_box().send_keys(Keys.ENTER)
+        item_number = num_rows + 1
+        self.wait_for_row_in_list_table(f"{item_number}: {item_text}")

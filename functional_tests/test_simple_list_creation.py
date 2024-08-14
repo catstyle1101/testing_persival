@@ -89,4 +89,4 @@ class NewVisitorTest(FunctionalTest):
         self.assertNotIn("Купить павлиньи перья", page_text)
         self.assertNotIn("Сделать мушку", page_text)
 
-        # Удовлетворенные они оба ложаться спать.
+        # Удовлетворенные они оба ложатся спать.
