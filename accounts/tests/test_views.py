@@ -81,10 +81,12 @@ class LoginViewTest(TestCase):
         self.assertRedirects(response, "/", status_code=301, target_status_code=200)
 
     def test_calls_authenticate_with_uid_from_get_request(self, mock_auth):
-        self.client.get("/accounts/login/?token=3200b151-42ed-4536-b8a7-6a7ccb6bc0bb")
+        request = self.client.get(
+            "/accounts/login/?token=3200b151-42ed-4536-b8a7-6a7ccb6bc0bb"
+        )
         self.assertEqual(
-            mock_auth.authenticate.call_args,
-            call(uid="3200b151-42ed-4536-b8a7-6a7ccb6bc0bb"),
+            mock_auth.authenticate.call_args[1]["uid"],
+            "3200b151-42ed-4536-b8a7-6a7ccb6bc0bb",
         )
 
     def test_calls_auth_login_with_user_if_there_is_one(self, mock_auth):

@@ -51,9 +51,7 @@ class ItemValidationTest(FunctionalTest):
     def test_cannot_add_duplicate_items(self):
         # Эдит открывает домашнюю страницу и начинает новый список
         self.browser.get(self.live_server_url)
-        self.get_item_input_box().send_keys("Buy wellies")
-        self.get_item_input_box().send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table("1: Buy wellies")
+        self.add_list_item("Buy wellies")
 
         # Она случайно пытается ввести повторяющийся элемент
         self.get_item_input_box().send_keys("Buy wellies")
@@ -70,9 +68,7 @@ class ItemValidationTest(FunctionalTest):
     def test_error_messages_are_cleared_on_input(self):
         # Эдит начинает список и вызывает ошибку валидации:
         self.browser.get(self.live_server_url)
-        self.get_item_input_box().send_keys("Banter to thick")
-        self.get_item_input_box().send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table("1: Banter to thick")
+        self.add_list_item("Banter to thick")
         self.get_item_input_box().send_keys("Banter to thick")
         self.get_item_input_box().send_keys(Keys.ENTER)
 
