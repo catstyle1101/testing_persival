@@ -1,3 +1,4 @@
+import selenium
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from selenium.webdriver.common.by import By
@@ -69,7 +70,7 @@ class MyListsTest(FunctionalTest):
         self.browser.find_element(By.LINK_TEXT, "Log out").click()
         self.wait_for(
             lambda: self.assertEqual(
-                self.browser.find_elements_by_link_text('My lists'),
+                self.browser.find_elements(By.LINK_TEXT, 'My lists'),
                 [],
             )
         )
