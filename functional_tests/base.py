@@ -38,10 +38,11 @@ def wait(fn):
 class FunctionalTest(StaticLiveServerTestCase):
     def setUp(self):
         chrome_options = Options()
-        chrome_options.add_argument("--headless")
+        # chrome_options.add_argument("--headless")
         self.browser = webdriver.Chrome(
             options=chrome_options,
         )
+        self._options = chrome_options
         self.staging_server = os.getenv("STAGING_SERVER")
         if self.staging_server:
             self.live_server_url = f"http://{self.staging_server}"
