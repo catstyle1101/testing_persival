@@ -2,6 +2,9 @@ import os
 import time
 from datetime import datetime
 
+from django.conf import settings
+from django.contrib.auth import get_user_model, SESSION_KEY, BACKEND_SESSION_KEY
+from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.common import WebDriverException
@@ -15,6 +18,7 @@ MAX_WAIT = 10
 SCREEN_DUMP_LOCATION = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "screendumps"
 )
+User = get_user_model()
 
 
 def wait(fn):
@@ -112,3 +116,11 @@ class FunctionalTest(StaticLiveServerTestCase):
             window_id=self._window_id,
             timestamp=timestamp,
         )
+
+    def create_pre_authenticated_session(self, email):
+        user = User.objects.get_or_create(email=email)[0]
+        session = SessionStore()
+        session[SESSION_KEY] = user.pk
+        session[BACKEND_SESSION_KEY] = settings.AUTHENTICATION_BACKENDS[0]
+        session.save()
+        return session.session_key
