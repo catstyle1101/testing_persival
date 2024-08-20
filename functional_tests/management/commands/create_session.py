@@ -15,6 +15,7 @@ class Command(BaseCommand):
         session_key = create_pre_authenticated_session(options["email"])
         self.stdout.write(session_key)
 
+
 def create_pre_authenticated_session(email):
     user = User.objects.get_or_create(email=email)[0]
     session = SessionStore()

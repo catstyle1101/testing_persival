@@ -42,7 +42,7 @@ class SendLoginEmailViewTest(TestCase):
             follow=True,
         )
 
-        message = list(response.context['messages'])[0]
+        message = list(response.context["messages"])[0]
         self.assertEqual(
             message.message,
             "Check your email for your login link for Superlists",

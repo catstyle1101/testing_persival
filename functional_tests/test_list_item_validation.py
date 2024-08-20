@@ -8,7 +8,7 @@ from functional_tests.base import FunctionalTest
 
 class ItemValidationTest(FunctionalTest):
     def get_error_element(self):
-        return self.browser.find_element(By.CLASS_NAME, 'has-error')
+        return self.browser.find_element(By.CLASS_NAME, "has-error")
 
     def test_cannot_add_empty_list_elements(self):
         """Тест: нельзя добавлять пустые элементы списка."""
