@@ -18,6 +18,7 @@ class SharingTest(FunctionalTest):
     def test_can_share_with_another_user(self):
         # Эдит является зарегистрированным пользователем
         self.create_pre_authenticated_session("edith@example.com")
+        self.browser.get(self.live_server_url)
         edith_browser = self.browser
         self.addCleanup(lambda: quit_if_possible(edith_browser))
 
@@ -40,7 +41,7 @@ class SharingTest(FunctionalTest):
         share_box = list_page.get_share_box()
         self.assertEqual(
             share_box.get_attribute("placeholder"),
-            "your-friend@example.com",
+            "your@friends-email.com",
         )
 
         # Она делится своим списком
@@ -57,8 +58,10 @@ class SharingTest(FunctionalTest):
 
         # На странице, которую Анцифер видит, говорится, что это список Эдит
         self.wait_for(
-            list_page.get_list_owner(),
-            "edith@example.com",
+            lambda: self.assertEqual(
+                list_page.get_list_owner(),
+                "edith@example.com",
+            )
         )
 
         # Он добавляет элемент в список

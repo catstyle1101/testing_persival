@@ -3,8 +3,7 @@ import time
 from datetime import datetime
 
 from django.conf import settings
-from django.contrib.auth import get_user_model, SESSION_KEY, BACKEND_SESSION_KEY
-from django.contrib.sessions.backends.db import SessionStore
+from django.contrib.auth import get_user_model
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.common import WebDriverException
@@ -12,7 +11,8 @@ from selenium.webdriver import Keys
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
-from .server_tools import reset_database
+from .management.commands.create_session import create_pre_authenticated_session
+from .server_tools import reset_database, create_session_on_server
 
 MAX_WAIT = 10
 SCREEN_DUMP_LOCATION = os.path.join(
@@ -119,9 +119,16 @@ class FunctionalTest(StaticLiveServerTestCase):
         )
 
     def create_pre_authenticated_session(self, email):
-        user = User.objects.get_or_create(email=email)[0]
-        session = SessionStore()
-        session[SESSION_KEY] = user.pk
-        session[BACKEND_SESSION_KEY] = settings.AUTHENTICATION_BACKENDS[0]
-        session.save()
-        return session.session_key
+        if self.staging_server:
+            session_key = create_session_on_server(self.staging_server, email)
+        else:
+            session_key = create_pre_authenticated_session(email)
+
+        self.browser.get(self.live_server_url + "/404-no-such-page")
+        self.browser.add_cookie(
+            dict(
+                name=settings.SESSION_COOKIE_NAME,
+                value=session_key,
+                path="/",
+            ),
+        )

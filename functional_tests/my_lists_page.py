@@ -12,11 +12,11 @@ class MyListsPage:
 
     def go_to_my_lists_page(self):
         self.test.browser.get(self.test.live_server_url)
-        self.test.browser.find_element(By.LINK_TEXT, "My Lists").click()
+        self.test.browser.find_element(By.LINK_TEXT, "My lists").click()
         self.test.wait_for(
             lambda: self.test.assertEqual(
                 self.test.browser.find_element(By.TAG_NAME, "h1").text,
-                "My Lists",
+                "My lists",
             )
         )
         return self

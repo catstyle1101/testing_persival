@@ -10,7 +10,7 @@ DUPLICATE_ITEM_ERROR = "You've already got this in your list"
 class ItemForm(forms.ModelForm):
     class Meta:
         model = Item
-        fields = ("text", )
+        fields = ("text",)
         widgets = {
             "text": forms.TextInput(
                 attrs={
@@ -40,6 +40,8 @@ class ExistingListItemForm(ItemForm):
 class NewListForm(ItemForm):
     def save(self, owner):
         if owner.is_authenticated:
-            return List.create_new(first_item_text=self.cleaned_data["text"], owner=owner)
+            return List.create_new(
+                first_item_text=self.cleaned_data["text"], owner=owner
+            )
         else:
             return List.create_new(first_item_text=self.cleaned_data["text"])
