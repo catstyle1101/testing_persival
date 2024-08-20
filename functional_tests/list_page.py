@@ -37,7 +37,7 @@ class ListPage:
         return self.test.browser.find_element(By.CSS_SELECTOR, "input[name='sharee']")
 
     def get_shared_with_list(self):
-        return self.test.browser.find_element(By.CSS_SELECTOR, ".list-sharee")
+        return self.test.browser.find_elements(By.CSS_SELECTOR, ".list-sharee")
 
     def share_list_with(self, email):
         self.get_share_box().send_keys(email)
@@ -50,4 +50,4 @@ class ListPage:
         )
 
     def get_list_owner(self):
-        self.test.browser.find_element(By.ID, "id_list_owner")
+        return self.test.browser.find_element(By.ID, "id_list_owner").text

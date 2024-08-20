@@ -228,3 +228,46 @@ class NewListUnitTest(TestCase):
         mock_form.is_valid.return_value = False
         new_list(self.request)
         self.assertFalse(mock_form.save.called)
+
+
+class ShareListTest(TestCase):
+    def test_post_redirects_to_lists_page(self):
+        owner = User.objects.create(email="a@b.com")
+        self.client.force_login(owner)
+        list_ = List.objects.create(owner=owner)
+
+        response = self.client.post(
+            f"/lists/{list_.pk}/share/",
+            data={"sharee": "b@b.com"},
+            follow=True,
+        )
+
+        self.assertRedirects(response, f"/lists/{list_.pk}/")
+
+    def test_list_can_be_shared_with_existing_user(self):
+        user = User.objects.create(email="a@b.com")
+        self.client.force_login(user)
+        another_user = User.objects.create(email="b@b.com")
+        list_ = List.objects.create(owner=user)
+
+        self.client.post(
+            f"/lists/{list_.pk}/share/",
+            data={"sharee": "b@b.com"},
+            follow=True,
+        )
+
+        self.assertIn(another_user, list_.shared_with.all())
+
+    def test_share_list_creates_user_if_not_exist(self):
+        user = User.objects.create(email="a@b.com")
+        self.client.force_login(user)
+        list_ = List.objects.create(owner=user)
+
+        self.client.post(
+            f"/lists/{list_.pk}/share/",
+            data={"sharee": "b@b.com"},
+            follow=True,
+        )
+
+        another_user = User.objects.get(email="b@b.com")
+        self.assertIn(another_user, list_.shared_with.all())

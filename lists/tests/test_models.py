@@ -11,7 +11,7 @@ User = get_user_model()
 class ItemModelTests(TestCase):
     def test_default_text(self):
         item = Item()
-        self.assertEqual(item.text, '')
+        self.assertEqual(item.text, "")
 
     def test_item_is_related_to_list(self):
         list_ = List.objects.create()
@@ -59,7 +59,7 @@ class ListModelTest(TestCase):
         list2 = List.objects.create()
         Item.objects.create(list=list1, text="bla")
         item = Item(list=list2, text="bla")
-        item.full_clean() # не должен поднять ошибку
+        item.full_clean()  # не должен поднять ошибку
 
     def test_list_ordering(self):
         list1 = List.objects.create()
@@ -91,3 +91,10 @@ class ListModelTest(TestCase):
         Item.objects.create(list=list_, text="first item")
         Item.objects.create(list=list_, text="second item")
         self.assertEqual(list_.name, "first item")
+
+    def test_list_has_shared_with_attribute(self):
+        user = User.objects.create(email="a@b.com")
+        list_ = List.objects.create()
+        list_.shared_with.add(user)
+
+        self.assertIn(user, list_.shared_with.all())
