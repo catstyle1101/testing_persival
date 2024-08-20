@@ -13,7 +13,9 @@ User = get_user_model()
 class AuthenticateTest(TestCase):
     def test_returns_None_if_no_such_token(self):
         request = self.client.get("/")
-        result = PasswordlessAuthenticationBackend().authenticate(request, (uuid.uuid4()))
+        result = PasswordlessAuthenticationBackend().authenticate(
+            request, (uuid.uuid4())
+        )
         self.assertIsNone(result)
 
     def test_returns_new_user_with_correct_email_if_token_exists(self):
