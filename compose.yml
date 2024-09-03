@@ -1,0 +1,14 @@
+services:
+  app:
+    build:
+      context: ../.
+      dockerfile: ./superlists/Dockerfile
+    volumes:
+      - ./static:/app/static
+      - ./database:/app/database
+      - .:/app
+    ports:
+      - 8000:8000
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python manage.py runserver 0.0.0.0:8000

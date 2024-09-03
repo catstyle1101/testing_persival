@@ -9,6 +9,7 @@ User = get_user_model()
 
 def home_page(request):
     """Домашняя страница."""
+    print("hello")
     return render(request, "home.html", {"form": ItemForm()})
 
 
