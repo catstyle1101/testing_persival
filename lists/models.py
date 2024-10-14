@@ -18,7 +18,7 @@ class List(models.Model):
     )
 
     def get_absolute_url(self):
-        return reverse("view_list", kwargs={"list_id": self.id})
+        return reverse("lists:view_list", kwargs={"list_id": self.id})
 
     @staticmethod
     def create_new(first_item_text, owner=None):
